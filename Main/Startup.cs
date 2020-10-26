@@ -2,7 +2,9 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using Interfaces;
+using Main.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -28,6 +30,14 @@ namespace Main
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddScoped<IWeatherManager, WeatherManager>();
+            services.ConfigureCors();
+            services.ConfigureIISIntegration();
+            services.ConfigureDatabase(Configuration);
+            services.AddAuthentication();
+            services.ConfigureIdentity();
+            services.ConfigureJWT(Configuration);
+            services.AddAutoMapper(typeof(Startup));
+            services.ConfigureSwagger();
             services.AddHttpClient();
             services.AddControllers();
         }
@@ -44,8 +54,14 @@ namespace Main
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseSwagger();
+            app.UseSwaggerUI(s =>
+            {
+                s.SwaggerEndpoint("/swagger/v1/swagger.json", "Jogging Tracker API v1");
+            });
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
