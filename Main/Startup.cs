@@ -13,6 +13,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Repository;
 using WeatherService;
 
 namespace Main
@@ -36,6 +37,7 @@ namespace Main
             services.AddAuthentication();
             services.ConfigureIdentity();
             services.ConfigureJWT(Configuration);
+            services.AddScoped<IAuthManager, AuthManager>();
             services.AddAutoMapper(typeof(Startup));
             services.ConfigureSwagger();
             services.AddHttpClient();

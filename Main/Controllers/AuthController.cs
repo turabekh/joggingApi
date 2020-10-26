@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -20,12 +21,15 @@ namespace Main.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
+        private readonly IAuthManager _authManager;
 
-        public AuthController(UserManager<User> userManager, RoleManager<Role> roleManager, IMapper mapper)
+        public AuthController(UserManager<User> userManager, RoleManager<Role> roleManager, 
+                                IMapper mapper, IAuthManager authManager)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
+            _authManager = authManager;
         }
 
         [HttpPost("register", Name = "Register")]
@@ -49,6 +53,21 @@ namespace Main.Controllers
 
             await _userManager.AddToRoleAsync(user, "Jogger");
             return StatusCode(201, new { Success = true });
+        }
+
+
+        [HttpPost("login", Name = "Login")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
+        {
+            if (!await _authManager.ValidateUser(userLoginDto))
+            {
+                return Unauthorized();
+            }
+            return Ok(new { Success = true,  Token = await _authManager.CreateToken() });
         }
     }
 }
