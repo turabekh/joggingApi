@@ -71,5 +71,64 @@ namespace Repository
         {
             _context.Update(jogging);
         }
+
+
+        public List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings)
+        {
+            joggings = joggings.OrderBy(j => j.JoggingDate);
+            if (joggings.Count() < 1)
+            {
+                return new List<WeekSummary>();
+            }
+            var temp_date = (int)joggings.FirstOrDefault().JoggingDate.DayOfWeek;
+            var temp_list = new List<Jogging>();
+            var resultList = new List<WeekSummary>();
+            int i = 1;
+            foreach(var j in joggings)
+            {
+                if ((int)j.JoggingDate.DayOfWeek >= temp_date)
+                {
+                    temp_list.Add(j);
+                }
+                else
+                {
+                    resultList.Add(GetWeekSummary(temp_list, i));
+                    i++;
+                    temp_list.Clear();
+                    temp_list.Add(j);
+                    temp_date = (int)j.JoggingDate.DayOfWeek;
+                }
+            }
+            if (temp_list.Count() > 0)
+            {
+                resultList.Add(GetWeekSummary(temp_list, i));
+            }
+            return resultList.OrderBy(r => r.WeekNumber).ToList();
+
+        }
+
+        private WeekSummary GetWeekSummary(List<Jogging> joggings, int weekNumber)
+        {
+            if (joggings.Count() < 1)
+            {
+                return null;
+            }
+            var userId = joggings.FirstOrDefault().UserId;
+            var avgTime = joggings.Average(j => j.JoggingDurationInMinutes);
+            var avgDistance = joggings.Average(j => j.DistanceInMeters);
+            var avgSpeed = avgDistance / avgTime;
+            var dateList = joggings.Select(j => j.JoggingDate).ToList();
+            return new WeekSummary
+            {
+                UserId = userId,
+                WeekNumber = weekNumber,
+                AvgTimeInMinutes = avgTime,
+                AvgDistanceInMeters = avgDistance,
+                AvgSpeedMeterPerMinute = avgSpeed, 
+                WeekDates = dateList
+
+            };
+        }
     }
+
 }

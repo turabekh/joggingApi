@@ -9,8 +9,11 @@ using Interfaces;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.DataTransferObjects.JoggingDtos;
+using Models.IdentityModels;
 using Models.JoggingModels;
 using Models.WeatherModels;
 
@@ -24,11 +27,14 @@ namespace Main.Controllers
         private readonly IJoggingRepository _repo;
         private readonly IMapper _mapper;
         private readonly IWeatherManager _weatherManager;
-        public JogginsController(IJoggingRepository repo, IMapper mapper, IWeatherManager weatherManager)
+        private readonly UserManager<User> _userManager;
+        public JogginsController(IJoggingRepository repo, IMapper mapper, 
+                                    IWeatherManager weatherManager, UserManager<User> userManager)
         {
             _repo = repo;
             _mapper = mapper;
             _weatherManager = weatherManager;
+            _userManager = userManager;
         }
 
         [HttpGet("", Name = "GetAllJoggings")]
@@ -211,6 +217,34 @@ namespace Main.Controllers
             _repo.DeleteJogging(jogging);
             _repo.Save();
             return NoContent();
+        }
+
+
+        [HttpGet("{userId}/reports", Name = "GetUserWeeklyReports")]
+        [ProducesResponseType(StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status404NotFound)]
+        [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
+        [ProducesResponseType(StatusCodes.Status500InternalServerError)]
+        [ProducesDefaultResponseType]
+        public async Task<IActionResult> GetReports(int userId)
+        {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var user = await _userManager.Users.Where(u => u.Id.Equals(userId)).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            if (user.UserName != userName)
+            {
+                return Unauthorized();
+            }
+
+            var joggings = await _repo.GetJoggingsByUserId(userId);
+            var weeks = _repo.GetWeeklyReports(joggings);
+            return Ok(weeks);
         }
 
     }

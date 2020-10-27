@@ -15,6 +15,7 @@ namespace Interfaces
         void CreateJogging(Jogging jogging);
         void UpdateJogging(Jogging jogging);
         void DeleteJogging(Jogging jogging);
+        List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings);
         void Save();
 
 
