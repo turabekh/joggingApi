@@ -13,6 +13,10 @@ namespace Main
         public MappingProfile()
         {
             CreateMap<UserRegisterationDto, User>();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<User, SingleUserDto>().ReverseMap();
+            CreateMap<UserCreateDto, User>().ReverseMap();
+            CreateMap<User, UserUpdateDto>().ReverseMap();
         }
     }
 

@@ -7,6 +7,7 @@ using Interfaces;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Models.DataTransferObjects.UserDtos;
 using Models.IdentityModels;
 
@@ -69,5 +70,6 @@ namespace Main.Controllers
             }
             return Ok(new { Success = true,  Token = await _authManager.CreateToken() });
         }
+
     }
 }

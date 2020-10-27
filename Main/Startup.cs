@@ -9,10 +9,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Models;
 using Repository;
 using WeatherService;
 
@@ -39,6 +41,7 @@ namespace Main
             services.ConfigureJWT(Configuration);
             services.AddScoped<IAuthManager, AuthManager>();
             services.AddAutoMapper(typeof(Startup));
+            services.AddDbContext<DataContext>();
             services.ConfigureSwagger();
             services.AddHttpClient();
             services.AddControllers();
