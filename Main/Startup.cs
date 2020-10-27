@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
+using LoggerService;
 using Main.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.HttpOverrides;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -15,6 +18,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Models;
+using NLog;
 using Repository;
 using WeatherService;
 
@@ -24,6 +28,7 @@ namespace Main
     {
         public Startup(IConfiguration configuration)
         {
+            LogManager.LoadConfiguration(string.Concat(Directory.GetCurrentDirectory(), "/nlog.config"));
             Configuration = configuration;
         }
 
@@ -43,6 +48,7 @@ namespace Main
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<DataContext>();
             services.AddScoped<IJoggingRepository, JoggingRepository>();
+            services.AddScoped<ILoggerManager, LoggerManager>();
             services.ConfigureSwagger();
             services.AddHttpClient();
             services.AddControllers();
@@ -57,6 +63,14 @@ namespace Main
             }
 
             app.UseHttpsRedirection();
+
+            app.UseStaticFiles();
+            app.UseCors("CorsPolicy");
+            app.UseForwardedHeaders(new ForwardedHeadersOptions
+            {
+                ForwardedHeaders = ForwardedHeaders.All
+            });
+
 
             app.UseRouting();
 

@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
 namespace Models.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201027181118_UserSeedAdded")]
+    partial class UserSeedAdded
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -156,21 +158,21 @@ namespace Models.Migrations
                         new
                         {
                             Id = 1,
-                            ConcurrencyStamp = "7d56a2a5-541e-44bd-9340-a435584c934f",
+                            ConcurrencyStamp = "4024f0fc-3dc0-4192-b22e-e7e376b59c69",
                             Name = "Manager",
                             NormalizedName = "MANAGER"
                         },
                         new
                         {
                             Id = 2,
-                            ConcurrencyStamp = "d05c7eae-dfe6-425f-8a35-671d77211e9d",
+                            ConcurrencyStamp = "86baea0a-78cf-4b8e-9287-10805d21a0f4",
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
                             Id = 3,
-                            ConcurrencyStamp = "78d5c290-0874-4514-a122-11ab2afb9ee6",
+                            ConcurrencyStamp = "88f64c2f-f402-4057-bc0f-6b7408a4f1d0",
                             Name = "Jogger",
                             NormalizedName = "JOGGER"
                         });
@@ -253,11 +255,13 @@ namespace Models.Migrations
                         {
                             Id = 2000,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "8f0dadac-1e98-42f6-945a-adbf87a7af9c",
+                            ConcurrencyStamp = "024e772c-9711-4313-99d7-a046e1c872aa",
                             Email = "adminuser@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEKmbZHVb20PlkjFopZj0ukgoqnCNpyqQeOLuY8znWyi3t1OsdThACjP5l7IZ+Dd8yw==",
+                            NormalizedEmail = "ADMINUSER@GMAIL.COM",
+                            NormalizedUserName = "ADMINUSER",
+                            PasswordHash = "AQAAAAEAACcQAAAAELLFNSqzAlskY03oQUsTBm1F/ddDu1Ilmbf8Mll/X1SAntHTHnjzr6Yc9TyTdk30rg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -267,11 +271,13 @@ namespace Models.Migrations
                         {
                             Id = 2001,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "0ebf158d-8d36-4b3e-81af-8806aa7b8eee",
+                            ConcurrencyStamp = "0a2d7f23-ee46-4be8-98e1-ae2abc0c1864",
                             Email = "manageruser@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAECxCLc8S21Rf7m+yGzRheBnhuCeMcdfHK1iLvWjHtVAVSbVndgK4g/PQAPVQh85pNw==",
+                            NormalizedEmail = "MANAGERUSER@GMAIL.COM",
+                            NormalizedUserName = "MANAGERUSER",
+                            PasswordHash = "AQAAAAEAACcQAAAAENNaSrUxhh2N+zeJwVsTiNIQs43LQCzleG6t2EG4La07tecwGhH3rn0QZA9ABWNzXg==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -281,11 +287,13 @@ namespace Models.Migrations
                         {
                             Id = 2002,
                             AccessFailedCount = 0,
-                            ConcurrencyStamp = "24292476-1fcc-4be9-98fa-62723fa5a12d",
+                            ConcurrencyStamp = "d9ddd9f3-22e2-4865-b196-9443010ea502",
                             Email = "joggeruser@gmail.com",
                             EmailConfirmed = true,
                             LockoutEnabled = false,
-                            PasswordHash = "AQAAAAEAACcQAAAAEN4I+xkxDDQciWCEkzPElOjc5QwmhOSQ8rVVlIKAXk+QWiXnjHJiXYrG9QTG1CCrKA==",
+                            NormalizedEmail = "JOGGERUSER@GMAIL.COM",
+                            NormalizedUserName = "JOGGERUSER",
+                            PasswordHash = "AQAAAAEAACcQAAAAEIIGho2sFo+EVO+9jNGJroHCpg1AzmdubjcNtLu2B38m9QG/1Omb4kx9Vk2AfMY1ug==",
                             PhoneNumberConfirmed = false,
                             SecurityStamp = "",
                             TwoFactorEnabled = false,
@@ -340,143 +348,6 @@ namespace Models.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("Joggings");
-
-                    b.HasData(
-                        new
-                        {
-                            Id = 1000,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(3562),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4029),
-                            DistanceInMeters = 2000.0,
-                            JoggingDate = new DateTime(2020, 10, 1, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 20,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1001,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4718),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4743),
-                            DistanceInMeters = 3000.0,
-                            JoggingDate = new DateTime(2020, 10, 3, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 25,
-                            Location = "Philadelphia",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1002,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4757),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4760),
-                            DistanceInMeters = 3500.0,
-                            JoggingDate = new DateTime(2020, 10, 5, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 40,
-                            Location = "Tashkent",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1003,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4765),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4768),
-                            DistanceInMeters = 6000.0,
-                            JoggingDate = new DateTime(2020, 10, 15, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 60,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1004,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4772),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4775),
-                            DistanceInMeters = 800.0,
-                            JoggingDate = new DateTime(2020, 10, 17, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 10,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1005,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4780),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4783),
-                            DistanceInMeters = 5300.0,
-                            JoggingDate = new DateTime(2020, 10, 19, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 50,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1006,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4787),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4790),
-                            DistanceInMeters = 7000.0,
-                            JoggingDate = new DateTime(2020, 10, 21, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 80,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1007,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4795),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4798),
-                            DistanceInMeters = 500.0,
-                            JoggingDate = new DateTime(2020, 10, 23, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 10,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        },
-                        new
-                        {
-                            Id = 1008,
-                            DateCreated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4802),
-                            DateUpdated = new DateTime(2020, 10, 27, 14, 27, 26, 341, DateTimeKind.Local).AddTicks(4805),
-                            DistanceInMeters = 10000.0,
-                            JoggingDate = new DateTime(2020, 10, 25, 0, 0, 0, 0, DateTimeKind.Unspecified),
-                            JoggingDurationInMinutes = 120,
-                            Location = "London",
-                            TemperatureC = 20f,
-                            TemperatureF = 60f,
-                            UserId = 2001,
-                            WeatherCondition = "Clear",
-                            humidity = 30f
-                        });
                 });
 
             modelBuilder.Entity("Models.IdentityModels.UserRole", b =>
@@ -486,23 +357,6 @@ namespace Models.Migrations
                     b.HasIndex("RoleId");
 
                     b.HasDiscriminator().HasValue("UserRole");
-
-                    b.HasData(
-                        new
-                        {
-                            UserId = 2000,
-                            RoleId = 2
-                        },
-                        new
-                        {
-                            UserId = 2001,
-                            RoleId = 1
-                        },
-                        new
-                        {
-                            UserId = 2002,
-                            RoleId = 3
-                        });
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<int>", b =>

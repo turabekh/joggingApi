@@ -4,6 +4,7 @@ using Models;
 using Models.JoggingModels;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -73,41 +74,36 @@ namespace Repository
         }
 
 
-        public List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings)
+       public List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings)
         {
-            joggings = joggings.OrderBy(j => j.JoggingDate);
+            List<WeekSummary> weekSummaries = new List<WeekSummary>();
             if (joggings.Count() < 1)
             {
-                return new List<WeekSummary>();
+                return weekSummaries;
             }
-            var temp_date = (int)joggings.FirstOrDefault().JoggingDate.DayOfWeek;
-            var temp_list = new List<Jogging>();
-            var resultList = new List<WeekSummary>();
+            CultureInfo myCI = new CultureInfo("en-US");
+            Calendar myCal = myCI.Calendar;
+            CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
+            DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
+
+            var yearlyLookup = joggings.ToLookup(j => j.JoggingDate.Year, j => j);
             int i = 1;
-            foreach(var j in joggings)
+            foreach (var gr in yearlyLookup.OrderBy(y => y.Key))
             {
-                if ((int)j.JoggingDate.DayOfWeek >= temp_date)
+                var weeklyLookup = gr.ToLookup(g => myCal.GetWeekOfYear(g.JoggingDate, myCWR, myFirstDOW), g => g);
+                foreach (var week in weeklyLookup.OrderBy(w => w.Key))
                 {
-                    temp_list.Add(j);
-                }
-                else
-                {
-                    resultList.Add(GetWeekSummary(temp_list, i));
+                    var weekSummary = GetWeekSummary(week.ToList());
+                    weekSummary.WeekNumber = i;
+                    weekSummaries.Add(weekSummary);
                     i++;
-                    temp_list.Clear();
-                    temp_list.Add(j);
-                    temp_date = (int)j.JoggingDate.DayOfWeek;
                 }
             }
-            if (temp_list.Count() > 0)
-            {
-                resultList.Add(GetWeekSummary(temp_list, i));
-            }
-            return resultList.OrderBy(r => r.WeekNumber).ToList();
+            return weekSummaries;
 
         }
 
-        private WeekSummary GetWeekSummary(List<Jogging> joggings, int weekNumber)
+        private WeekSummary GetWeekSummary(List<Jogging> joggings)
         {
             if (joggings.Count() < 1)
             {
@@ -121,12 +117,10 @@ namespace Repository
             return new WeekSummary
             {
                 UserId = userId,
-                WeekNumber = weekNumber,
                 AvgTimeInMinutes = avgTime,
                 AvgDistanceInMeters = avgDistance,
-                AvgSpeedMeterPerMinute = avgSpeed, 
+                AvgSpeedMeterPerMinute = avgSpeed,
                 WeekDates = dateList
-
             };
         }
     }

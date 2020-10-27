@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Models;
 
 namespace Models.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20201027182726_AddedJoggingSeedData")]
+    partial class AddedJoggingSeedData
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -353,7 +355,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -368,7 +370,7 @@ namespace Models.Migrations
                             Location = "Philadelphia",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -383,7 +385,7 @@ namespace Models.Migrations
                             Location = "Tashkent",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -398,7 +400,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -413,7 +415,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -428,7 +430,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -443,7 +445,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -458,7 +460,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         },
@@ -473,7 +475,7 @@ namespace Models.Migrations
                             Location = "London",
                             TemperatureC = 20f,
                             TemperatureF = 60f,
-                            UserId = 2001,
+                            UserId = 2002,
                             WeatherCondition = "Clear",
                             humidity = 30f
                         });
