@@ -42,6 +42,7 @@ namespace Main
             services.AddScoped<IAuthManager, AuthManager>();
             services.AddAutoMapper(typeof(Startup));
             services.AddDbContext<DataContext>();
+            services.AddScoped<IJoggingRepository, JoggingRepository>();
             services.ConfigureSwagger();
             services.AddHttpClient();
             services.AddControllers();

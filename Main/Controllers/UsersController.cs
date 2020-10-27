@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
@@ -20,7 +21,6 @@ namespace Main.Controllers
 
     [Route("api/users")]
     [ApiController]
-    [Authorize(Roles = "Admin, Manager")]
     public class UsersController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
@@ -47,7 +47,9 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetUsers()
         {
-            var users = await _userManager.Users.ToListAsync();
+            var users = await _userManager.Users
+                .Include(u => u.Joggings)
+                .ToListAsync();
             var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
             
             return Ok(userDtos);
@@ -62,7 +64,8 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userManager.Users.Where(u => u.Id.Equals(id)).FirstOrDefaultAsync();
+            var user = await _userManager.Users.Where(u => u.Id.Equals(id))
+                .Include(u => u.Joggings).FirstOrDefaultAsync();
             if (user == null)
             {
                 return NotFound();

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models.Configuration;
 using Models.IdentityModels;
+using Models.JoggingModels;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -33,11 +34,23 @@ namespace Models
                 .WithMany(r => r.UserRoles)
                 .HasForeignKey(ur => ur.RoleId)
                 .IsRequired();
-            
+
+            modelBuilder.Entity<Jogging>()
+                .HasOne(j => j.User)
+                .WithMany(u => u.Joggings)
+                .HasForeignKey(j => j.UserId)
+                .OnDelete(DeleteBehavior.Cascade)
+                .IsRequired();
+
+            modelBuilder.Entity<Jogging>().Property(j => j.UserId).IsRequired();
+            modelBuilder.Entity<Jogging>().Property(j => j.JoggingDate).IsRequired();
+            modelBuilder.Entity<Jogging>().Property(j => j.DistanceInMeters).IsRequired();
+            modelBuilder.Entity<Jogging>().Property(j => j.JoggingDurationInMinutes).IsRequired();
+            modelBuilder.Entity<Jogging>().Property(j => j.Location).IsRequired().HasMaxLength(500);
         }
 
 
-
+        public DbSet<Jogging> Joggings { get; set; }
 
     }
 }
