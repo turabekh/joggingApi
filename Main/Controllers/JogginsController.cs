@@ -16,7 +16,9 @@ using Microsoft.EntityFrameworkCore;
 using Models.DataTransferObjects.JoggingDtos;
 using Models.IdentityModels;
 using Models.JoggingModels;
+using Models.RequestParams;
 using Models.WeatherModels;
+using Newtonsoft.Json;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Main.Controllers
@@ -46,20 +48,13 @@ namespace Main.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetAllJoggings()
+        public async Task<IActionResult> GetAllJoggings([FromQuery] JoggingParameters joggingParameters)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-            IEnumerable<Jogging> joggings = new List<Jogging>();
-            if (role == "Admin")
-            {
-                joggings = await _repo.GetAllJoggings();
-            }
-            else if( role == "Jogger")
-            {
-                joggings = await _repo.GetJoggingsByUsername(userName);
-            }
+            PagedList<Jogging> joggings = role == "Admin" ? await _repo.GetAllJoggings(joggingParameters) : await _repo.GetJoggingsByUsername(userName, joggingParameters);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(joggings.MetaData));
             var joggingDtos = _mapper.Map<IEnumerable<JoggingDto>>(joggings);
             return Ok(joggingDtos);
         }
@@ -221,7 +216,7 @@ namespace Main.Controllers
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetReports(int id)
+        public async Task<IActionResult> GetReports(int id, [FromQuery] ReportParameters reportParameters)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
@@ -233,7 +228,8 @@ namespace Main.Controllers
             }
 
             var joggings = await _repo.GetJoggingsByUserId(id);
-            var weeks = _repo.GetWeeklyReports(joggings);
+            var weeks = _repo.GetWeeklyReports(joggings, reportParameters);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(weeks.MetaData));
             return Ok(weeks);
         }
 

@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using Models;
 using Models.JoggingModels;
+using Models.RequestParams;
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -29,13 +30,15 @@ namespace Repository
             _context.Remove(jogging);
         }
 
-        public async Task<IEnumerable<Jogging>> GetAllJoggings()
+        public async Task<PagedList<Jogging>> GetAllJoggings(JoggingParameters joggingParameters)
         {
-            return await _context.Joggings
+            var joggings = await _context.Joggings
                 .Include(j => j.User)
                 .OrderBy(j => j.JoggingDate)
                 .AsNoTracking()
                 .ToListAsync();
+            return PagedList<Jogging>
+                .ToPagedList(joggings, joggingParameters.PageNumber, joggingParameters.PageSize);
         }
 
         public async Task<Jogging> GetJoggingById(int id)
@@ -54,14 +57,18 @@ namespace Repository
                 .Include(j => j.User)
                 .AsNoTracking()
                 .ToListAsync();
+
         }
 
-        public async Task<IEnumerable<Jogging>> GetJoggingsByUsername(string userName)
+        public async Task<PagedList<Jogging>> GetJoggingsByUsername(string userName, JoggingParameters joggingParameters)
         {
-            return await _context.Joggings
+            var joggings = await _context.Joggings
                 .Include(j => j.User)
                 .Where(j => j.User.UserName == userName)
+                .AsNoTracking()
                 .ToListAsync();
+            return PagedList<Jogging>
+                .ToPagedList(joggings, joggingParameters.PageNumber, joggingParameters.PageSize);
         }
         public void Save()
         {
@@ -74,13 +81,9 @@ namespace Repository
         }
 
 
-       public List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings)
+       public PagedList<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings, ReportParameters reportParameters)
         {
             List<WeekSummary> weekSummaries = new List<WeekSummary>();
-            if (joggings.Count() < 1)
-            {
-                return weekSummaries;
-            }
             CultureInfo myCI = new CultureInfo("en-US");
             Calendar myCal = myCI.Calendar;
             CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
@@ -99,8 +102,8 @@ namespace Repository
                     i++;
                 }
             }
-            return weekSummaries;
 
+            return PagedList<WeekSummary>.ToPagedList(weekSummaries, reportParameters.PageNumber, reportParameters.PageSize);
         }
 
         private WeekSummary GetWeekSummary(List<Jogging> joggings)

@@ -1,4 +1,5 @@
 ﻿using Models.JoggingModels;
+using Models.RequestParams;
 using System;
 using System.Collections.Generic;
 using System.Text;
@@ -8,14 +9,14 @@ namespace Interfaces
 {
     public interface IJoggingRepository
     {
-        Task<IEnumerable<Jogging>> GetAllJoggings();
+        Task<PagedList<Jogging>> GetAllJoggings(JoggingParameters joggingParameters);
         Task<Jogging> GetJoggingById(int id);
         Task<IEnumerable<Jogging>> GetJoggingsByUserId(int userId);
-        Task<IEnumerable<Jogging>> GetJoggingsByUsername(string userName);
+        Task<PagedList<Jogging>> GetJoggingsByUsername(string userName, JoggingParameters joggingParameters);
         void CreateJogging(Jogging jogging);
         void UpdateJogging(Jogging jogging);
         void DeleteJogging(Jogging jogging);
-        List<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings);
+        PagedList<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings, ReportParameters reportParameters);
         void Save();
 
 

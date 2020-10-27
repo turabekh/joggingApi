@@ -15,6 +15,8 @@ using Microsoft.Extensions.FileProviders;
 using Models;
 using Models.DataTransferObjects.UserDtos;
 using Models.IdentityModels;
+using Models.RequestParams;
+using Newtonsoft.Json;
 
 [assembly: ApiConventionType(typeof(DefaultApiConventions))]
 namespace Main.Controllers
@@ -46,13 +48,14 @@ namespace Main.Controllers
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetUsers()
+        public async Task<IActionResult> GetUsers([FromQuery] UserParameters userParamters)
         {
             var users = await _userManager.Users
                 .Include(u => u.Joggings)
                 .ToListAsync();
-            var userDtos = _mapper.Map<IEnumerable<UserDto>>(users);
-            
+            var pagedUsers = PagedList<User>.ToPagedList(users, userParamters.PageNumber, userParamters.PageSize);
+            var userDtos = _mapper.Map<IEnumerable<UserDto>>(pagedUsers);
+            Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedUsers.MetaData));
             return Ok(userDtos);
         }
 
