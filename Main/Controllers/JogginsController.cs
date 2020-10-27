@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Threading.Tasks.Dataflow;
 using AutoMapper;
 using Interfaces;
+using Main.ActionFilters;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -28,13 +29,16 @@ namespace Main.Controllers
         private readonly IMapper _mapper;
         private readonly IWeatherManager _weatherManager;
         private readonly UserManager<User> _userManager;
-        public JogginsController(IJoggingRepository repo, IMapper mapper, 
-                                    IWeatherManager weatherManager, UserManager<User> userManager)
+        private readonly ILoggerManager _logger;
+
+        public JogginsController(IJoggingRepository repo, IMapper mapper, IWeatherManager weatherManager, 
+                            UserManager<User> userManager, ILoggerManager logger)
         {
             _repo = repo;
             _mapper = mapper;
             _weatherManager = weatherManager;
             _userManager = userManager;
+            _logger = logger;
         }
 
         [HttpGet("", Name = "GetAllJoggings")]
@@ -62,6 +66,7 @@ namespace Main.Controllers
 
 
         [HttpGet("{id}", Name = "GetJoggingById")]
+        [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -72,11 +77,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-            var jogging = await _repo.GetJoggingById(id);
-            if (jogging == null)
-            {
-                return NotFound();
-            }
+            var jogging = HttpContext.Items["jogging"] as Jogging;
             if (role != "Admin" && jogging.User.UserName != userName)
             {
                 return Unauthorized();    
@@ -86,6 +87,7 @@ namespace Main.Controllers
         }
 
         [HttpPost("", Name = "CreateJogging")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
@@ -93,10 +95,6 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> CreateJogging([FromBody] JoggingCreateDto joggingCreateDto)
         {
-            if (joggingCreateDto == null)
-            {
-                return BadRequest("JoggingCreateDto object is null");
-            }
             var searchDate = joggingCreateDto.JoggingDate;
             var jogging = _mapper.Map<Jogging>(joggingCreateDto);
             WeatherServiceResult weatherResult;
@@ -132,6 +130,8 @@ namespace Main.Controllers
 
 
         [HttpPut("{id}", Name = "UpdateJogging")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -143,11 +143,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-            var jogging = await _repo.GetJoggingById(id);
-            if (jogging == null)
-            {
-                return NotFound();
-            }
+            var jogging = HttpContext.Items["jogging"] as Jogging;
 
             if (joggingUpdateDto == null)
             {
@@ -192,6 +188,7 @@ namespace Main.Controllers
 
 
         [HttpDelete("{id}", Name = "DeleteJogging")]
+        [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -203,11 +200,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-            var jogging = await _repo.GetJoggingById(id);
-            if (jogging == null)
-            {
-                return NotFound();
-            }
+            var jogging = HttpContext.Items["jogging"] as Jogging;
 
             if (role != "Admin" && jogging.User.UserName != userName)
             {
@@ -220,29 +213,26 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("{userId}/reports", Name = "GetUserWeeklyReports")]
+        [HttpGet("{id}/reports", Name = "GetUserWeeklyReports")]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
-        public async Task<IActionResult> GetReports(int userId)
+        public async Task<IActionResult> GetReports(int id)
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
-            var user = await _userManager.Users.Where(u => u.Id.Equals(userId)).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
 
             if (user.UserName != userName)
             {
                 return Unauthorized();
             }
 
-            var joggings = await _repo.GetJoggingsByUserId(userId);
+            var joggings = await _repo.GetJoggingsByUserId(id);
             var weeks = _repo.GetWeeklyReports(joggings);
             return Ok(weeks);
         }

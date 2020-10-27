@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
+using Main.ActionFilters;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -36,6 +37,7 @@ namespace Main.Controllers
         }
 
         [HttpPost("register", Name = "Register")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,18 +63,13 @@ namespace Main.Controllers
 
 
         [HttpPost("login", Name = "Login")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
-            if (!ModelState.IsValid)
-            {
-                _logger.LogError("Invalid model state for the userLoginDto object");
-                return UnprocessableEntity(ModelState);
-            }
-
             if (!await _authManager.ValidateUser(userLoginDto))
             {
                 return Unauthorized();

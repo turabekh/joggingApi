@@ -5,6 +5,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
+using Main.ActionFilters;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -57,6 +58,7 @@ namespace Main.Controllers
 
 
         [HttpGet("{id}", Name = "GetUserById")]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -64,12 +66,7 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetUserById(int id)
         {
-            var user = await _userManager.Users.Where(u => u.Id.Equals(id))
-                .Include(u => u.Joggings).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
             var roles = await _userManager.GetRolesAsync(user);
             var userDto = _mapper.Map<SingleUserDto>(user);
             userDto.Roles = roles;
@@ -79,6 +76,7 @@ namespace Main.Controllers
 
 
         [HttpPost("", Name = "CreateUser")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -97,14 +95,14 @@ namespace Main.Controllers
                     {
                         ModelState.TryAddModelError(err.Code, err.Description);
                     }
-                    return BadRequest(ModelState);
+                    return UnprocessableEntity(ModelState);
                 }
                 foreach(var role in userCreateDto.Roles)
                 {
                     if (!await _roleManager.RoleExistsAsync(role))
                     {
                         ModelState.TryAddModelError("", $"Role: {role} does not exist");
-                        return BadRequest(ModelState);
+                        return UnprocessableEntity(ModelState);
                     }
                 }
                 await _userManager.AddToRolesAsync(user, userCreateDto.Roles);
@@ -119,6 +117,8 @@ namespace Main.Controllers
 
 
         [HttpPut("{id}", Name = "UpdateUser")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status400BadRequest)]
@@ -126,12 +126,7 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
         {
-            var user = await _userManager.Users.Where(u => u.Id.Equals(id)).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
-
+            var user = HttpContext.Items["user"] as User;
             user.FirstName = userUpdateDto.FirstName;
             user.LastName = userUpdateDto.LastName;
             user.UserName = userUpdateDto.UserName;
@@ -142,6 +137,8 @@ namespace Main.Controllers
         }
 
         [HttpPost("{id}/roles", Name = "UpdateUserRoles")]
+        [ServiceFilter(typeof(ValidationFilterAttribute))]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -149,11 +146,7 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> UpdateUserRoles(int id, [FromBody] UserRolesDto userRolesDto)
         {
-            var user = await _userManager.Users.Where(u => u.Id.Equals(id)).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
             foreach (var role in userRolesDto.Roles)
             {
                 if (!await _roleManager.RoleExistsAsync(role))
@@ -172,17 +165,14 @@ namespace Main.Controllers
         }
 
         [HttpDelete("{id}", Name = "DeleteUser")]
+        [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> DeleteUser(int id)
         {
-            var user = await _userManager.Users.Where(u => u.Id.Equals(id)).FirstOrDefaultAsync();
-            if (user == null)
-            {
-                return NotFound();
-            }
+            var user = HttpContext.Items["user"] as User;
             await _userManager.DeleteAsync(user);
             return NoContent();
         }

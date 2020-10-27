@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
 using LoggerService;
+using Main.ActionFilters;
 using Main.Extensions;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -49,6 +50,9 @@ namespace Main
             services.AddDbContext<DataContext>();
             services.AddScoped<IJoggingRepository, JoggingRepository>();
             services.AddScoped<ILoggerManager, LoggerManager>();
+            services.AddScoped<ValidationFilterAttribute>();
+            services.AddScoped<ValidateUserExistsAttribute>();
+            services.AddScoped<ValidateJoggingExistsAttribute>();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
