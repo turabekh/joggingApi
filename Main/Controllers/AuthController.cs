@@ -23,14 +23,16 @@ namespace Main.Controllers
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
+        private readonly ILoggerManager _logger;
 
         public AuthController(UserManager<User> userManager, RoleManager<Role> roleManager, 
-                                IMapper mapper, IAuthManager authManager)
+                                IMapper mapper, IAuthManager authManager, ILoggerManager logger)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
             _authManager = authManager;
+            _logger = logger;
         }
 
         [HttpPost("register", Name = "Register")]
@@ -49,7 +51,8 @@ namespace Main.Controllers
                 {
                     ModelState.TryAddModelError(err.Code, err.Description);
                 }
-                return BadRequest(ModelState);
+                _logger.LogError("Invalid model state for the UserRegistration object");
+                return UnprocessableEntity(ModelState);
             }
 
             await _userManager.AddToRoleAsync(user, "Jogger");
@@ -64,6 +67,12 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> Login([FromBody] UserLoginDto userLoginDto)
         {
+            if (!ModelState.IsValid)
+            {
+                _logger.LogError("Invalid model state for the userLoginDto object");
+                return UnprocessableEntity(ModelState);
+            }
+
             if (!await _authManager.ValidateUser(userLoginDto))
             {
                 return Unauthorized();
