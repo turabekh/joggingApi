@@ -44,7 +44,7 @@ namespace Main.Controllers
             _logger = logger;
         }
 
-        [HttpGet("", Name = "GetAllJoggings")]
+        [HttpGet("", Name = "GetAllJoggings"), Authorize(Roles = "Admin, Jogger")]
         [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -55,6 +55,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
+
             PagedList<Jogging> joggings = role == "Admin" ? await _repo.GetAllJoggings(joggingParameters) : await _repo.GetJoggingsByUsername(userName, joggingParameters);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(joggings.MetaData));
             var joggingDtos = _mapper.Map<IEnumerable<JoggingDto>>(joggings);
@@ -62,7 +63,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetJoggingById")]
+        [HttpGet("{id}", Name = "GetJoggingById"), Authorize(Roles = "Admin, Jogger")]
         [EnableQuery]
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -84,7 +85,7 @@ namespace Main.Controllers
             return Ok(joggingDto);
         }
 
-        [HttpPost("", Name = "CreateJogging")]
+        [HttpPost("", Name = "CreateJogging"), Authorize(Roles = "Admin, Jogger")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -93,6 +94,20 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> CreateJogging([FromBody] JoggingCreateDto joggingCreateDto)
         {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
+            var user = await _userManager.Users.Where(u => u.Id.Equals(joggingCreateDto.UserId)).FirstOrDefaultAsync();
+            if (user == null)
+            {
+                ModelState.AddModelError("", $"User with userid: {joggingCreateDto.UserId} does not exist");
+                return BadRequest(ModelState);
+            }
+            if (user.UserName != userName && role != "Admin" )
+            {
+                return Unauthorized();
+            }
+
             var searchDate = joggingCreateDto.JoggingDate;
             var jogging = _mapper.Map<Jogging>(joggingCreateDto);
             WeatherServiceResult weatherResult;
@@ -127,7 +142,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpPut("{id}", Name = "UpdateJogging")]
+        [HttpPut("{id}", Name = "UpdateJogging"), Authorize(Roles = "Admin, Jogger")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -185,7 +200,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpDelete("{id}", Name = "DeleteJogging")]
+        [HttpDelete("{id}", Name = "DeleteJogging"), Authorize(Roles = "Admin, Jogger")]
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
@@ -211,7 +226,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("{id}/reports", Name = "GetUserWeeklyReports")]
+        [HttpGet("{id}/reports", Name = "GetUserWeeklyReports"), Authorize(Roles = "Admin, Jogger")]
         [EnableQuery]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]

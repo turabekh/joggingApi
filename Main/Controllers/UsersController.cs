@@ -44,7 +44,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("", Name = "GetUsers")]
+        [HttpGet("", Name = "GetUsers"), Authorize(Roles = "Admin, Manager")]
         [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -62,7 +62,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetUserById")]
+        [HttpGet("{id}", Name = "GetUserById"), Authorize(Roles = "Admin, Manager")]
         [EnableQuery]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -81,7 +81,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpPost("", Name = "CreateUser")]
+        [HttpPost("", Name = "CreateUser"), Authorize(Roles = "Admin, Manager")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -122,7 +122,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpPut("{id}", Name = "UpdateUser")]
+        [HttpPut("{id}", Name = "UpdateUser"), Authorize(Roles = "Admin, Manager")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -142,7 +142,7 @@ namespace Main.Controllers
             return NoContent();
         }
 
-        [HttpPost("{id}/roles", Name = "UpdateUserRoles")]
+        [HttpPost("{id}/roles", Name = "UpdateUserRoles"), Authorize(Roles = "Admin, Manager")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
@@ -170,7 +170,7 @@ namespace Main.Controllers
 
         }
 
-        [HttpDelete("{id}", Name = "DeleteUser")]
+        [HttpDelete("{id}", Name = "DeleteUser"), Authorize(Roles = "Admin, Manager")]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
