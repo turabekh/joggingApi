@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using AutoMapper;
 using Interfaces;
 using Main.ActionFilters;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
@@ -44,6 +45,7 @@ namespace Main.Controllers
 
 
         [HttpGet("", Name = "GetUsers")]
+        [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,6 +63,7 @@ namespace Main.Controllers
 
 
         [HttpGet("{id}", Name = "GetUserById")]
+        [EnableQuery]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]

@@ -7,6 +7,7 @@ using System.Threading.Tasks.Dataflow;
 using AutoMapper;
 using Interfaces;
 using Main.ActionFilters;
+using Microsoft.AspNet.OData;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -44,6 +45,7 @@ namespace Main.Controllers
         }
 
         [HttpGet("", Name = "GetAllJoggings")]
+        [EnableQuery]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -61,6 +63,7 @@ namespace Main.Controllers
 
 
         [HttpGet("{id}", Name = "GetJoggingById")]
+        [EnableQuery]
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
@@ -209,6 +212,7 @@ namespace Main.Controllers
 
 
         [HttpGet("{id}/reports", Name = "GetUserWeeklyReports")]
+        [EnableQuery]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]

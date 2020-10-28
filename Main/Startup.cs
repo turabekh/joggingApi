@@ -8,6 +8,9 @@ using Interfaces;
 using LoggerService;
 using Main.ActionFilters;
 using Main.Extensions;
+using Microsoft.AspNet.OData.Builder;
+using Microsoft.AspNet.OData.Extensions;
+using Microsoft.AspNet.OData.Formatter;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpOverrides;
@@ -18,7 +21,11 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
+using Microsoft.OData.Edm;
 using Models;
+using Models.IdentityModels;
+using Models.JoggingModels;
 using NLog;
 using Repository;
 using WeatherService;
@@ -53,9 +60,30 @@ namespace Main
             services.AddScoped<ValidationFilterAttribute>();
             services.AddScoped<ValidateUserExistsAttribute>();
             services.AddScoped<ValidateJoggingExistsAttribute>();
+            services.AddControllers(mvcOptions =>
+                   mvcOptions.EnableEndpointRouting = false)
+               .AddNewtonsoftJson();
+            services.AddOData();
             services.Configure<ApiBehaviorOptions>(options =>
             {
                 options.SuppressModelStateInvalidFilter = true;
+            });
+            services.AddMvc(op =>
+            {
+                foreach (var formatter in op.OutputFormatters
+                    .OfType<ODataOutputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
+                {
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/prs.mock-odata"));
+                }
+                foreach (var formatter in op.InputFormatters
+                    .OfType<ODataInputFormatter>()
+                    .Where(it => !it.SupportedMediaTypes.Any()))
+                {
+                    formatter.SupportedMediaTypes.Add(
+                        new MediaTypeHeaderValue("application/prs.mock-odata"));
+                }
             });
             services.ConfigureSwagger();
             services.AddHttpClient();
@@ -94,7 +122,19 @@ namespace Main
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.Select().Filter().OrderBy().Count().Expand().MaxTop(10);
+                endpoints.EnableDependencyInjection();
+                endpoints.MapODataRoute("odata", "odata", GetEdmModel());
             });
+        }
+
+        IEdmModel GetEdmModel()
+        {
+            var odataBuilder = new ODataConventionModelBuilder();
+            odataBuilder.EntitySet<User>("Users");
+            odataBuilder.EntitySet<Jogging>("Joggings");
+
+            return odataBuilder.GetEdmModel();
         }
     }
 }
