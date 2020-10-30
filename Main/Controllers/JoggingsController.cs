@@ -26,22 +26,20 @@ namespace Main.Controllers
 {
     [Route("api/joggings")]
     [ApiController]
-    public class JogginsController : ControllerBase
+    public class JoggingsController : ControllerBase
     {
         private readonly IJoggingRepository _repo;
         private readonly IMapper _mapper;
         private readonly IWeatherManager _weatherManager;
         private readonly UserManager<User> _userManager;
-        private readonly ILoggerManager _logger;
 
-        public JogginsController(IJoggingRepository repo, IMapper mapper, IWeatherManager weatherManager, 
-                            UserManager<User> userManager, ILoggerManager logger)
+        public JoggingsController(IJoggingRepository repo, IMapper mapper, IWeatherManager weatherManager, 
+                            UserManager<User> userManager)
         {
             _repo = repo;
             _mapper = mapper;
             _weatherManager = weatherManager;
             _userManager = userManager;
-            _logger = logger;
         }
 
         [HttpGet("", Name = "GetAllJoggings"), Authorize(Roles = "Admin, Jogger")]
@@ -56,7 +54,8 @@ namespace Main.Controllers
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
 
-            PagedList<Jogging> joggings = role == "Admin" ? await _repo.GetAllJoggings(joggingParameters) : await _repo.GetJoggingsByUsername(userName, joggingParameters);
+            PagedList<Jogging> joggings = role == "Admin" ? await _repo.GetAllJoggings(joggingParameters) : 
+                await _repo.GetJoggingsByUsername(userName, joggingParameters);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(joggings.MetaData));
             var joggingDtos = _mapper.Map<IEnumerable<JoggingDto>>(joggings);
             return Ok(joggingDtos);
@@ -69,6 +68,7 @@ namespace Main.Controllers
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetJoggingById(int id)
@@ -79,7 +79,7 @@ namespace Main.Controllers
             var jogging = HttpContext.Items["jogging"] as Jogging;
             if (role != "Admin" && jogging.User.UserName != userName)
             {
-                return Unauthorized();    
+                return StatusCode(403);    
             }
             var joggingDto = _mapper.Map<JoggingDto>(jogging);
             return Ok(joggingDto);
@@ -89,6 +89,7 @@ namespace Main.Controllers
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
         [ProducesDefaultResponseType]
@@ -97,6 +98,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
+            var users = await _userManager.Users.ToListAsync();
             var user = await _userManager.Users.Where(u => u.Id.Equals(joggingCreateDto.UserId)).FirstOrDefaultAsync();
             if (user == null)
             {
@@ -105,7 +107,7 @@ namespace Main.Controllers
             }
             if (user.UserName != userName && role != "Admin" )
             {
-                return Unauthorized();
+                return StatusCode(403);
             }
 
             var searchDate = joggingCreateDto.JoggingDate;

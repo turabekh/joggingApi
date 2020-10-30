@@ -27,6 +27,11 @@ namespace Models.Configuration
                 {
                     UserId = 2002,
                     RoleId = 3
+                }, 
+                new UserRole
+                {
+                    UserId = 2003,
+                    RoleId = 3
                 }
             );
         }

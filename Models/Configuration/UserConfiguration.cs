@@ -14,6 +14,7 @@ namespace Models.Configuration
         private int AdminId = 2000;
         private int ManagerId = 2001;
         private int JoggerId = 2002;
+        private int JoggerId2 = 2003;
         public void Configure(EntityTypeBuilder<User> builder)
         {
             builder.HasData
@@ -47,6 +48,17 @@ namespace Models.Configuration
                     NormalizedUserName = "JOGGERUSER",
                     Email = "joggeruser@gmail.com",
                     NormalizedEmail = "JOGGERUSER@GMAIL.COM",
+                    EmailConfirmed = true,
+                    PasswordHash = hasher.HashPassword(null, "2020JoggerUser"),
+                    SecurityStamp = string.Empty
+                },
+                new User
+                {
+                    Id = JoggerId2,
+                    UserName = "userWithoutJoggings",
+                    NormalizedUserName = "USERWITHOUTJOGGINS",
+                    Email = "userWithoutJoggings@gmail.com",
+                    NormalizedEmail = "USERWITHOUTJOGGINS@GMAIL.COM",
                     EmailConfirmed = true,
                     PasswordHash = hasher.HashPassword(null, "2020JoggerUser"),
                     SecurityStamp = string.Empty
