@@ -24,16 +24,16 @@ namespace Tests
                 var descriptor = services.SingleOrDefault(
                   d => d.ServiceType ==
                      typeof(DbContextOptions<DataContext>));
-                //if (descriptor != null)
-                //{
-                //    services.Remove(descriptor);
-                //}
+                if (descriptor != null)
+                {
+                    services.Remove(descriptor);
+                }
                 var serviceProvider = new ServiceCollection()
                   .AddEntityFrameworkSqlServer()
                   .BuildServiceProvider();
-                services.AddDbContext<DataContext>(options =>
+                services.AddDbContextPool<DataContext>(options =>
                 {
-                    options.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=TestDBForJoggingTracker;Integrated Security=SSPI;");
+                    options.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=JoggingAPITestingDB;Integrated Security=SSPI;");
                     options.UseInternalServiceProvider(serviceProvider);
                 });
                 var sp = services.BuildServiceProvider();
