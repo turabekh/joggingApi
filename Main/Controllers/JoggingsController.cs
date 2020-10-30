@@ -149,6 +149,7 @@ namespace Main.Controllers
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -166,7 +167,7 @@ namespace Main.Controllers
             }
             if (role != "Admin" && jogging.User.UserName != userName)
             {
-                return Unauthorized();
+                return StatusCode(403);
             }
 
             var searchDate = joggingUpdateDto.JoggingDate;
@@ -206,6 +207,7 @@ namespace Main.Controllers
         [ServiceFilter(typeof(ValidateJoggingExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -219,7 +221,7 @@ namespace Main.Controllers
 
             if (role != "Admin" && jogging.User.UserName != userName)
             {
-                return Unauthorized();
+                return StatusCode(403);
             }
 
             _repo.DeleteJogging(jogging);
@@ -233,6 +235,7 @@ namespace Main.Controllers
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(StatusCodes.Status403Forbidden)]
         [ProducesResponseType(StatusCodes.Status404NotFound)]
         [ProducesResponseType(StatusCodes.Status422UnprocessableEntity)]
         [ProducesResponseType(StatusCodes.Status500InternalServerError)]
@@ -241,11 +244,12 @@ namespace Main.Controllers
         {
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
             var user = HttpContext.Items["user"] as User;
 
-            if (user.UserName != userName)
+            if (user.UserName != userName && role != "Admin")
             {
-                return Unauthorized();
+                return StatusCode(403);
             }
 
             var joggings = await _repo.GetJoggingsByUserId(id);

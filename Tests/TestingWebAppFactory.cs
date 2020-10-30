@@ -29,11 +29,11 @@ namespace Tests
                 //    services.Remove(descriptor);
                 //}
                 var serviceProvider = new ServiceCollection()
-                  .AddEntityFrameworkSqlite()
+                  .AddEntityFrameworkSqlServer()
                   .BuildServiceProvider();
                 services.AddDbContext<DataContext>(options =>
                 {
-                    options.UseSqlServer("JoggerTrackerTestDB");
+                    options.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=TestDBForJoggingTracker;Integrated Security=SSPI;");
                     options.UseInternalServiceProvider(serviceProvider);
                 });
                 var sp = services.BuildServiceProvider();

@@ -324,5 +324,171 @@ namespace Tests.Controller
             Assert.Equal(422, (int)response.StatusCode);
         }
 
+        [Fact]
+        public async Task UpdateJoggingWithAdminRole_Returns204NoContentOnSuccess()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingUpdateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                DistanceInMeters = 5000,
+                Location = "Philadelphia",
+                JoggingDurationInMinutes = 30,
+            };
+            var response = await _client.PutAsJsonAsync("/api/joggings/1000", requestBody);
+            Assert.Equal(204, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateJogging_Returns404NotFound()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingUpdateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                DistanceInMeters = 5000,
+                Location = "Philadelphia",
+                JoggingDurationInMinutes = 30,
+            };
+            var response = await _client.PutAsJsonAsync("/api/joggings/654651", requestBody);
+            Assert.Equal(404, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateJogging_Returns403ForbiddenWhenUserIsNotOwnerOfJogging()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "userWithoutJoggings");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingUpdateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                DistanceInMeters = 5000,
+                Location = "Philadelphia",
+                JoggingDurationInMinutes = 30,
+            };
+            var response = await _client.PutAsJsonAsync("/api/joggings/1000", requestBody);
+            Assert.Equal(403, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateJogging_ReturnsBadRequestWithoutRequestBody()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "joggeruser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingUpdateDto();
+            var response = await _client.PutAsJsonAsync("/api/joggings/1000", requestBody);
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task UpdateJogging_ReturnsBadRequestWithoutInvalidRequestBody()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "joggeruser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingUpdateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                Location = "Philadelphia",
+            };
+            var response = await _client.PutAsJsonAsync("/api/joggings/1000", requestBody);
+            Assert.Equal(422, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteJoggingWithAdminUser_ReturnsNotFoundWithInvalidJoggingId()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.DeleteAsync("/api/joggings/651115");
+            Assert.Equal(404, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteJogging_Returns403ForbiddenWhenUserIsNotOwnerOfJogging()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "userWithoutJoggings");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.DeleteAsync("/api/joggings/1000");
+            Assert.Equal(403, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteJoggingAdminRole_Returns204NoContentOnSuccess()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingCreateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                DistanceInMeters = 2500,
+                Location = "Philadelphia",
+                JoggingDurationInMinutes = 30,
+                UserId = 2002
+            };
+            var response = await _client.PostAsJsonAsync("/api/joggings", requestBody);
+            var newlyCreatedJogging = await _client.GetFromJsonAsync<JoggingDto>(response.Headers.Location);
+            var deleteResponse = await _client.DeleteAsync($"/api/joggings/{newlyCreatedJogging.Id}");
+            Assert.Equal(204, (int)deleteResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task DeleteJoggingWithJoggerRole_Returns204NoContentOnSucessWhenUserIsOwnerOfJogging()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "joggeruser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var requestBody = new JoggingCreateDto
+            {
+                JoggingDate = new DateTime(2020, 10, 29),
+                DistanceInMeters = 2500,
+                Location = "Philadelphia",
+                JoggingDurationInMinutes = 30,
+                UserId = 2002
+            };
+            var response = await _client.PostAsJsonAsync("/api/joggings", requestBody);
+            var newlyCreatedJogging = await _client.GetFromJsonAsync<JoggingDto>(response.Headers.Location);
+            var deleteResponse = await _client.DeleteAsync($"/api/joggings/{newlyCreatedJogging.Id}");
+            Assert.Equal(204, (int)deleteResponse.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetWeeklyReportsWithAdminRole_Returns200Ok()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.GetAsync("/api/joggings/2002/reports");
+            Assert.Equal(200, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetWeeklyReportsWithJoggerRole_Returns200OkWhenJoggerIsOwner()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "joggeruser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.GetAsync("/api/joggings/2002/reports");
+            Assert.Equal(200, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetWeeklyReportsWithJoggerRole_Returns403ForbiddenWhenJoggerIsNotOwner()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "userWithoutJoggings");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.GetAsync("/api/joggings/2002/reports");
+            Assert.Equal(403, (int)response.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetWeeklyReports_ReturnsPaginationInfoInResponseHeader()
+        {
+            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
+            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
+            var response = await _client.GetAsync("/api/joggings/2002/reports");
+            var xPaginationResponseHeader = response.Headers.Where(h => h.Key == "X-Pagination").FirstOrDefault();
+            var paginationValues = xPaginationResponseHeader.Value.FirstOrDefault();
+            Assert.Contains("TotalPages", paginationValues);
+            Assert.Contains("PageSize", paginationValues);
+        }
     }
 }
