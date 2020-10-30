@@ -324,21 +324,6 @@ namespace Tests.Controller
             Assert.Equal(422, (int)response.StatusCode);
         }
 
-        [Fact]
-        public async Task UpdateJoggingWithAdminRole_Returns204NoContentOnSuccess()
-        {
-            var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
-            _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
-            var requestBody = new JoggingUpdateDto
-            {
-                JoggingDate = new DateTime(2020, 10, 29),
-                DistanceInMeters = 5000,
-                Location = "Philadelphia",
-                JoggingDurationInMinutes = 30,
-            };
-            var response = await _client.PutAsJsonAsync("/api/joggings/1000", requestBody);
-            Assert.Equal(204, (int)response.StatusCode);
-        }
 
         [Fact]
         public async Task UpdateJogging_Returns404NotFound()
@@ -397,7 +382,7 @@ namespace Tests.Controller
         }
 
         [Fact]
-        public async Task DeleteJoggingWithAdminUser_ReturnsNotFoundWithInvalidJoggingId()
+        public async Task DeleteJoggingWithAdminUser_Returns404NotFoundWithInvalidJoggingId()
         {
             var jwtToken = MockJWTTokens.CreateRoleJWTToken("Admin", "adminuser");
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
