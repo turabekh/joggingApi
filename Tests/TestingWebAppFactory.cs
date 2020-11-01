@@ -29,11 +29,11 @@ namespace Tests
                     services.Remove(descriptor);
                 }
                 var serviceProvider = new ServiceCollection()
-                  .AddEntityFrameworkSqlServer()
+                  .AddEntityFrameworkInMemoryDatabase()
                   .BuildServiceProvider();
                 services.AddDbContextPool<DataContext>(options =>
                 {
-                    options.UseSqlServer("Data Source=localhost\\SQLEXPRESS;Initial Catalog=JoggingAPITestingDB;Integrated Security=SSPI;");
+                    options.UseInMemoryDatabase("InMemoryApiTest"); 
                     options.UseInternalServiceProvider(serviceProvider);
                 });
                 var sp = services.BuildServiceProvider();
