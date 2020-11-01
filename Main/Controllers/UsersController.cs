@@ -58,7 +58,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpGet("{id}", Name = "GetUserById"), Authorize(Roles = "Admin, Manager")]
+        [HttpGet("{id}", Name = "GetUserById"), Authorize(Roles = "Admin, Manager, Jogger")]
         [EnableQuery]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status200OK)]
@@ -68,7 +68,14 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetUserById(int id)
         {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
             var user = HttpContext.Items["user"] as User;
+            if (role == "Jogger" && user.UserName != userName)
+            {
+                return StatusCode(403);
+            }
             var roles = await _userManager.GetRolesAsync(user);
             var userDto = _mapper.Map<SingleUserDto>(user);
             userDto.Roles = roles;

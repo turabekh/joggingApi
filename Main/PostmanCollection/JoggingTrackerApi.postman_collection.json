@@ -1,0 +1,2478 @@
+{
+	"info": {
+		"_postman_id": "3bde29fd-a0ac-4e82-a30e-897edd6d7121",
+		"name": "JoggingTrackerApi",
+		"description": "Jogging Tracker Api ",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Register User",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"firstName\": \"NewfirstName\",\r\n  \"lastName\": \"newLastname\",\r\n  \"userName\": \"newuserfrompostman\",\r\n  \"password\": \"2020NewUser\",\r\n  \"email\": \"newuserfrompostman@gmail.com\",\r\n  \"phoneNumber\": \"231321321\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:44391/api/auth/register",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44391",
+							"path": [
+								"api",
+								"auth",
+								"register"
+							]
+						},
+						"description": "Register User: Register User as Jogger(Role)"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User Jogger",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"joggeruser\",\r\n  \"password\": \"2020JoggerUser\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:44391/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44391",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Login User: Returns JWT Token For Jogger Role"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User Admin",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"adminuser\",\r\n  \"password\": \"2020AdminUser\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:44391/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44391",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Return JWT for Admin Role"
+					},
+					"response": []
+				},
+				{
+					"name": "Login User Manager",
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n  \"userName\": \"manageruser\",\r\n  \"password\": \"2020ManagerUser\"\r\n}"
+						},
+						"url": {
+							"raw": "https://localhost:44391/api/auth/login",
+							"protocol": "https",
+							"host": [
+								"localhost"
+							],
+							"port": "44391",
+							"path": [
+								"api",
+								"auth",
+								"login"
+							]
+						},
+						"description": "Returns JWT for Manager Role"
+					},
+					"response": []
+				}
+			],
+			"description": "Auth Controller Endpoints",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Joggings",
+			"item": [
+				{
+					"name": "Get All Joggings Endpoint",
+					"item": [
+						{
+							"name": "Get All Joggings With Admin Role - Might need updating token",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								},
+								"description": "Returns All Joggings if Admin \r\nPaging is enabled\r\n"
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Joggings With Jogger Role - Might need token updating",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNDI4MTE0MywiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.hogt_l6AIlfCwcah3_WCt3-0xIYQxqNmhGnJXhPMJTo",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								},
+								"description": "Returns all joggings that belong to Jogger Only."
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Joggings With Manager Role - Might need token updating",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA0MjgxNDQ5LCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.iVLOkMPihB7vCfYk7T4LTOLnB-hEWGggFIigeiDyyzA",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								},
+								"description": "Returns Forbidden Result. Managers are not allowed to CRUD Joggings"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Joggings With Filters",
+					"item": [
+						{
+							"name": "Filter: gt - Greater Than",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=joggingDate gt 2019-01-01",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "joggingDate gt 2019-01-01"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: lt - Less Than",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=joggingDate gt 2019-01-01",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "joggingDate gt 2019-01-01"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: eq -Equal",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=joggingDate eq 2020-10-17",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "joggingDate eq 2020-10-17"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: Or -Or Operator",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=(joggingDate gt 2019-01-01) Or (distanceInMeters lt 600)",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "(joggingDate gt 2019-01-01) Or (distanceInMeters lt 600)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: And - And Operator",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=(joggingDate gt 2019-01-01) And (distanceInMeters lt 600)",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "(joggingDate gt 2019-01-01) And (distanceInMeters lt 600)"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a0cb4963-eb11-4004-ae7a-8d4076c9bac6",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "18ccfa36-c8de-46d6-bf5c-7d45a9d47b8c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Joggings With Select Fields",
+					"item": [
+						{
+							"name": "Select: JoggingDate Field",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$select=joggingDate",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$select",
+											"value": "joggingDate"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Select: JoggingDate and Location Fields",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$select=joggingDate, Location",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$select",
+											"value": "joggingDate, Location"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Select And Filter Together",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=joggingDate eq 2020-10-17&$select=Location, joggingDate",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "joggingDate eq 2020-10-17"
+										},
+										{
+											"key": "$select",
+											"value": "Location, joggingDate"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: Or -Or Operator",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=(joggingDate gt 2019-01-01) Or (distanceInMeters lt 600)",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "(joggingDate gt 2019-01-01) Or (distanceInMeters lt 600)"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: And - And Operator",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDQyODEzNDEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.xaAJtgc46hVWhmDKvK6eLKmwH7nLXVKiVJTWIaP7cDU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings?$filter=(joggingDate gt 2019-01-01) And (distanceInMeters lt 600)",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "(joggingDate gt 2019-01-01) And (distanceInMeters lt 600)"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "a879d618-126b-4df9-8814-41c000989bce",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "3ac100c5-36f3-45e2-adaf-04fd48a4a593",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Single Jogging Endpoint",
+					"item": [
+						{
+							"name": "Get Jogging With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTYzMTEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.TtgCXPdJN37mETh59skNk0pCg2gBK8BVngD48vNZe7Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								},
+								"description": "Returns single jogging if exists by Id"
+							},
+							"response": []
+						},
+						{
+							"name": "Get Jogging With Jogger Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Jogging With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								},
+								"description": "Returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Jogger Weekly Reports",
+					"item": [
+						{
+							"name": "Get Jogger Weekly Reports with Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTYzMTEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.TtgCXPdJN37mETh59skNk0pCg2gBK8BVngD48vNZe7Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/2002/reports",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"2002",
+										"reports"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Jogger Weekly Reports With Jogger Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/2002/reports",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"2002",
+										"reports"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Jogger Weekly Reports With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/2002/reports",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"2002",
+										"reports"
+									]
+								},
+								"description": "Returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "86f09213-2872-4e79-9d4c-59e8b345722e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "f2cfc7f9-4fda-450f-aa0a-36c1a1be5d54",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create Joggings",
+					"item": [
+						{
+							"name": "Create Jogging With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTYzMTEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.TtgCXPdJN37mETh59skNk0pCg2gBK8BVngD48vNZe7Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:10:02.812Z\",\r\n  \"distanceInMeters\": 6000,\r\n  \"location\": \"Philadelphia\",\r\n  \"joggingDurationInMinutes\": 70,\r\n  \"userId\": 2002\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Jogging With Jogger Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:10:02.812Z\",\r\n  \"distanceInMeters\": 6000,\r\n  \"location\": \"Philadelphia\",\r\n  \"joggingDurationInMinutes\": 70,\r\n  \"userId\": 2002\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Jogging With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:10:02.812Z\",\r\n  \"distanceInMeters\": 6000,\r\n  \"location\": \"Philadelphia\",\r\n  \"joggingDurationInMinutes\": 70,\r\n  \"userId\": 2002\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings"
+									]
+								},
+								"description": "Returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Update Joggings",
+					"item": [
+						{
+							"name": "Update Jogging With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTYzMTEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.TtgCXPdJN37mETh59skNk0pCg2gBK8BVngD48vNZe7Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:14:52.908Z\",\r\n  \"distanceInMeters\": 5000,\r\n  \"location\": \"London\",\r\n  \"joggingDurationInMinutes\": 40\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Jogging With Jogger Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:10:02.812Z\",\r\n  \"distanceInMeters\": 6000,\r\n  \"location\": \"Philadelphia\",\r\n  \"joggingDurationInMinutes\": 70,\r\n  \"userId\": 2002\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Jogging With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"joggingDate\": \"2020-11-01T16:10:02.812Z\",\r\n  \"distanceInMeters\": 6000,\r\n  \"location\": \"Philadelphia\",\r\n  \"joggingDurationInMinutes\": 70,\r\n  \"userId\": 2002\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								},
+								"description": "Returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "d960ce6e-d0b0-487a-9bab-1580bd937089",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "b23c8b6d-48fe-4be8-acfe-0910af07d009",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Delete Joggings ",
+					"item": [
+						{
+							"name": "Update Jogging With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTYzMTEsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.TtgCXPdJN37mETh59skNk0pCg2gBK8BVngD48vNZe7Q",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Jogging With Jogger Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1001",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1001"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Jogging With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/joggings/1000",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"joggings",
+										"1000"
+									]
+								},
+								"description": "Returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "f8cd389b-9fc7-44cd-94a2-2e9ba3d753f3",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "9d6f5b1a-92a0-452a-9751-91b94b96836b",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"description": "Joggings Controller Endpoints",
+			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Users",
+			"item": [
+				{
+					"name": "Get All Users",
+					"item": [
+						{
+							"name": "Get All Users With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Users With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get All Users With Jogger Role ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								},
+								"description": "returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Users with Filters",
+					"item": [
+						{
+							"name": "Filter: eq - Equal ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users?$filter=firstname eq 'Turaboy'",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "firstname eq 'Turaboy'"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter In Inner Object(Navigation property)",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users?$expand=joggings($filter=Location eq 'London')",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "$expand",
+											"value": "joggings($filter=Location eq 'London')"
+										}
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Filter: contains - Contains",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users?$filter=contains(userName, 'u')",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									],
+									"query": [
+										{
+											"key": "$filter",
+											"value": "contains(userName, 'u')"
+										}
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "21cd99fb-dc5f-4433-a1aa-9c7c9364a254",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "5ce1da9b-bfcd-4cc7-9526-58748471b54c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Create Users",
+					"item": [
+						{
+							"name": "Create User With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"neww userr3r\",\r\n  \"lastName\": \"new user3lastname\",\r\n  \"userName\": \"newuser3\",\r\n  \"password\": \"2020NewUser3\",\r\n  \"email\": \"newuser3@gmail.com\",\r\n  \"phoneNumber\": \"5151515151\",\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"neww userr5r\",\r\n  \"lastName\": \"new user3lastname\",\r\n  \"userName\": \"newuser5\",\r\n  \"password\": \"2020NewUser5\",\r\n  \"email\": \"newuser5@gmail.com\",\r\n  \"phoneNumber\": \"5151515151\",\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create User With Jogger Role ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"neww userr3r\",\r\n  \"lastName\": \"new user3lastname\",\r\n  \"userName\": \"newuser4\",\r\n  \"password\": \"2020NewUser4\",\r\n  \"email\": \"newuser4@gmail.com\",\r\n  \"phoneNumber\": \"5151515151\",\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users"
+									]
+								},
+								"description": "returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "0d2091be-e77b-4f09-8171-67fb4f995ddc",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "04515c15-96ae-4aa7-af5e-2340dc5df35d",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Update Users",
+					"item": [
+						{
+							"name": "Update User With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"Updated firstName\",\r\n  \"lastName\": \"Updated lastName\",\r\n  \"userName\": \"joggeruser\",\r\n  \"email\": \"joggeruser@gmail.com\",\r\n  \"phoneNumber\": \"555555555\"\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"Updated firstName\",\r\n  \"lastName\": \"Updated lastName\",\r\n  \"userName\": \"joggeruser\",\r\n  \"email\": \"joggeruser@gmail.com\",\r\n  \"phoneNumber\": \"555555555\"\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User With Jogger Role Forbidden When Not Owner",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"neww userr3r\",\r\n  \"lastName\": \"new user3lastname\",\r\n  \"userName\": \"newuser4\",\r\n  \"password\": \"2020NewUser4\",\r\n  \"email\": \"newuser4@gmail.com\",\r\n  \"phoneNumber\": \"5151515151\",\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2001",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2001"
+									]
+								},
+								"description": "returns Forbidden"
+							},
+							"response": []
+						},
+						{
+							"name": "Update User With Jogger Role ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "PUT",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"firstName\": \"Updated firstName\",\r\n  \"lastName\": \"Updated lastName\",\r\n  \"userName\": \"joggeruser\",\r\n  \"email\": \"joggeruser@gmail.com\",\r\n  \"phoneNumber\": \"555555555\"\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								}
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "4ef61642-bd83-4f8d-8671-65424644b552",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "cd753be1-951f-42c9-8658-cd9c10162efc",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Update User Roles",
+					"item": [
+						{
+							"name": "Update User Roles With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": 2002,\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002/roles",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Roles With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": 0,\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002/roles",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002",
+										"roles"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update User Roles With Jogger ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n  \"userId\": 0,\r\n  \"roles\": [\r\n    \"Jogger\"\r\n  ]\r\n}"
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2001/roles",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2001",
+										"roles"
+									]
+								},
+								"description": "returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "ff35d336-f220-419d-b7ff-b7d47e6b5be4",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "2d39643c-a315-40ea-a0b8-ebe7cc133cf8",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Delete Users",
+					"item": [
+						{
+							"name": "Delete User With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2003",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2003"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete  User With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2003",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2003"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete User With Jogger Role ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "DELETE",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": ""
+								},
+								"url": {
+									"raw": "https://localhost:44391/api/users/2003",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2003"
+									]
+								},
+								"description": "returns Forbidden"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "e3a0beec-ecc1-493d-9e5d-41c6ead3306e",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "21deac5b-a98f-4717-b848-28a2ac64a9d9",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				},
+				{
+					"name": "Get Single User",
+					"item": [
+						{
+							"name": "Get Single User With Admin Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiYWRtaW51c2VyIiwiaHR0cDovL3NjaGVtYXMubWljcm9zb2Z0LmNvbS93cy8yMDA4LzA2L2lkZW50aXR5L2NsYWltcy9yb2xlIjoiQWRtaW4iLCJleHAiOjE2MDU0NTY2NjgsImlzcyI6IkpvZ2dpbmdUcmFja2VyQVBJIiwiYXVkIjoiaHR0cHM6Ly9sb2NhbGhvc3Q6NTAwMSJ9.VUEHSwLXpLqxX-i5qtWQSs57oDE-1jIEoPjV3rerjWM",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Single User With Manager Role",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoibWFuYWdlcnVzZXIiLCJodHRwOi8vc2NoZW1hcy5taWNyb3NvZnQuY29tL3dzLzIwMDgvMDYvaWRlbnRpdHkvY2xhaW1zL3JvbGUiOiJNYW5hZ2VyIiwiZXhwIjoxNjA1NDU2MzEzLCJpc3MiOiJKb2dnaW5nVHJhY2tlckFQSSIsImF1ZCI6Imh0dHBzOi8vbG9jYWxob3N0OjUwMDEifQ.oeQQAYjBcsp0nceQuXWarT9KKgTOYp0RQ6zIuGCw3T4",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Single User With Jogger Role ",
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJodHRwOi8vc2NoZW1hcy54bWxzb2FwLm9yZy93cy8yMDA1LzA1L2lkZW50aXR5L2NsYWltcy9uYW1lIjoiam9nZ2VydXNlciIsImh0dHA6Ly9zY2hlbWFzLm1pY3Jvc29mdC5jb20vd3MvMjAwOC8wNi9pZGVudGl0eS9jbGFpbXMvcm9sZSI6IkpvZ2dlciIsImV4cCI6MTYwNTQ1NjMwOCwiaXNzIjoiSm9nZ2luZ1RyYWNrZXJBUEkiLCJhdWQiOiJodHRwczovL2xvY2FsaG9zdDo1MDAxIn0.eKyRdtfjFGwFDlN7OR4BqcH-PTonab5LuQ_Ys-zovMU",
+											"type": "string"
+										}
+									]
+								},
+								"method": "GET",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"url": {
+									"raw": "https://localhost:44391/api/users/2002",
+									"protocol": "https",
+									"host": [
+										"localhost"
+									],
+									"port": "44391",
+									"path": [
+										"api",
+										"users",
+										"2002"
+									]
+								},
+								"description": "returns Forbidden if not the owner"
+							},
+							"response": []
+						}
+					],
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"id": "80573b9f-ac53-4fb5-96b7-0ec56c564319",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"id": "73bcb4bf-bc2d-450e-b432-575e91ccd02c",
+								"type": "text/javascript",
+								"exec": [
+									""
+								]
+							}
+						}
+					],
+					"protocolProfileBehavior": {},
+					"_postman_isSubFolder": true
+				}
+			],
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"id": "e55d9f37-933b-4a61-90de-20f7928ddbee",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"id": "1d08b8ac-e9a4-4471-9f3d-f5a5330c525e",
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			],
+			"protocolProfileBehavior": {}
+		}
+	],
+	"protocolProfileBehavior": {}
+}
