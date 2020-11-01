@@ -12,6 +12,7 @@ using Models.RequestParams;
 using Moq;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,7 +27,7 @@ namespace Tests.UnitTests
         JoggingsController _controller;
         IJoggingRepository _joggingRepo;
         IWeatherManager _weatherManager;
-        private Mock<UserManager<User>> _userManager = Helper.MockUserManager<User>(Helper.GetUsers());
+        private Mock<UserManager<User>> _userManager = IdentityServiceMock.MockUserManager<User>(Helper.GetUsers());
 
         public JoggingControllerUnitTest()
         {
@@ -39,7 +40,7 @@ namespace Tests.UnitTests
 
 
         [Fact]
-        public async Task GetAllJoggingsTest()
+        public async Task GetAllJoggingsTest_ReturnsOkObjectResultOnSuccess()
         {
             // Arrange
             var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
@@ -54,6 +55,26 @@ namespace Tests.UnitTests
 
             Assert.IsType<OkObjectResult>(result);
 
+        }
+
+        [Fact]
+        public async Task GetAllJoggings_ReturnsPagedListResult()
+        {
+            // Arrange
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            { new Claim(ClaimTypes.Name, "adminuser"), new Claim(ClaimTypes.Role, "Admin")}));
+            _controller.ControllerContext = new ControllerContext();
+            _controller.ControllerContext.HttpContext = new DefaultHttpContext { User = user };
+
+            // Act 
+            var result = await _controller.GetAllJoggings(new JoggingParameters()) as OkObjectResult;
+            var paginationHeader = _controller.Response.Headers.Where(h => h.Key.Contains("X-Pagination")).FirstOrDefault();
+            var paginationValues = paginationHeader.Value.FirstOrDefault();
+            //Assert
+
+            Assert.IsType<List<JoggingDto>>(result.Value);
+            Assert.Contains("TotalPages", paginationValues);
+            Assert.Contains("PageSize", paginationValues);
         }
 
         [Fact]

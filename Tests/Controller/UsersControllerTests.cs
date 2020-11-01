@@ -213,7 +213,7 @@ namespace Tests.Controller
         }
 
         [Fact]
-        public async Task UpdateUserWithJoggerRole_Returns403Forbidden()
+        public async Task UpdateUserWithJoggerRole_Returns403ForbiddenWhenUserIsNotOwner()
         {
             var jwtToken = MockJWTTokens.CreateRoleJWTToken("Jogger", "joggeruser");
             _client.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwtToken}");
@@ -225,7 +225,7 @@ namespace Tests.Controller
                 Email = "UpdateEmail@gmail.com",
                 UserName = "joggeruser"
             };
-            var response = await _client.PutAsJsonAsync("/api/users/2002", requestBody);
+            var response = await _client.PutAsJsonAsync("/api/users/2001", requestBody);
             Assert.Equal(403, (int)response.StatusCode);
         }
 

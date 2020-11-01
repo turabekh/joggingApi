@@ -30,17 +30,13 @@ namespace Main.Controllers
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
-        private readonly IAuthManager _authManager;
-        private DataContext _context;
 
         public UsersController(UserManager<User> userManager, RoleManager<Role> roleManager,
-                                IMapper mapper, IAuthManager authManager, DataContext context)
+                                IMapper mapper)
         {
             _userManager = userManager;
             _roleManager = roleManager;
             _mapper = mapper;
-            _authManager = authManager;
-            _context = context;
         }
 
 
@@ -52,9 +48,9 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> GetUsers([FromQuery] UserParameters userParamters)
         {
-            var users = await _userManager.Users
+            var users = _userManager.Users
                 .Include(u => u.Joggings)
-                .ToListAsync();
+                .ToList();
             var pagedUsers = PagedList<User>.ToPagedList(users, userParamters.PageNumber, userParamters.PageSize);
             var userDtos = _mapper.Map<IEnumerable<UserDto>>(pagedUsers);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(pagedUsers.MetaData));
@@ -91,7 +87,6 @@ namespace Main.Controllers
         public async Task<IActionResult> CreateUser([FromBody] UserCreateDto userCreateDto)
         {
             var user = _mapper.Map<User>(userCreateDto);
-            await using var transaction = await _context.Database.BeginTransactionAsync();
             try
             {
                 var result = await _userManager.CreateAsync(user, userCreateDto.Password);
@@ -112,7 +107,6 @@ namespace Main.Controllers
                     }
                 }
                 await _userManager.AddToRolesAsync(user, userCreateDto.Roles);
-                await transaction.CommitAsync();
                 return StatusCode(201);
             }
             catch (Exception ex)
@@ -122,7 +116,7 @@ namespace Main.Controllers
         }
 
 
-        [HttpPut("{id}", Name = "UpdateUser"), Authorize(Roles = "Admin, Manager")]
+        [HttpPut("{id}", Name = "UpdateUser"), Authorize(Roles = "Admin, Manager, Jogger")]
         [ServiceFilter(typeof(ValidationFilterAttribute))]
         [ServiceFilter(typeof(ValidateUserExistsAttribute))]
         [ProducesResponseType(StatusCodes.Status204NoContent)]
@@ -132,7 +126,14 @@ namespace Main.Controllers
         [ProducesDefaultResponseType]
         public async Task<IActionResult> UpdateUser(int id, [FromBody] UserUpdateDto userUpdateDto)
         {
+            var claimsIdentity = this.User.Identity as ClaimsIdentity;
+            var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
+            var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
             var user = HttpContext.Items["user"] as User;
+            if (role == "Jogger" && user.UserName != userName)
+            {
+                return StatusCode(403);
+            }
             user.FirstName = userUpdateDto.FirstName;
             user.LastName = userUpdateDto.LastName;
             user.UserName = userUpdateDto.UserName;
@@ -161,11 +162,9 @@ namespace Main.Controllers
                     return BadRequest(ModelState);
                 }
             }
-            await using var transaction = await _context.Database.BeginTransactionAsync();
             var userRoles = await _userManager.GetRolesAsync(user);
             await _userManager.RemoveFromRolesAsync(user, userRoles);
             await _userManager.AddToRolesAsync(user, userRolesDto.Roles);
-            await transaction.CommitAsync();
             return Ok(new { Success = true });
 
         }
