@@ -3,6 +3,7 @@ using Models.JoggingModels;
 using Models.RequestParams;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -57,7 +58,27 @@ namespace Tests.MockServices
 
         public PagedList<WeekSummary> GetWeeklyReports(IEnumerable<Jogging> joggings, ReportParameters reportParameters)
         {
-            throw new NotImplementedException();
+            List<WeekSummary> weekSummaries = new List<WeekSummary>();
+            CultureInfo myCI = new CultureInfo("en-US");
+            Calendar myCal = myCI.Calendar;
+            CalendarWeekRule myCWR = myCI.DateTimeFormat.CalendarWeekRule;
+            DayOfWeek myFirstDOW = myCI.DateTimeFormat.FirstDayOfWeek;
+
+            var yearlyLookup = _joggings.ToLookup(j => j.JoggingDate.Year, j => j);
+            int i = 1;
+            foreach (var gr in yearlyLookup.OrderBy(y => y.Key))
+            {
+                var weeklyLookup = gr.ToLookup(g => myCal.GetWeekOfYear(g.JoggingDate, myCWR, myFirstDOW), g => g);
+                foreach (var week in weeklyLookup.OrderBy(w => w.Key))
+                {
+                    var weekSummary = GetWeekSummary(week.ToList());
+                    weekSummary.WeekNumber = i;
+                    weekSummaries.Add(weekSummary);
+                    i++;
+                }
+            }
+
+            return PagedList<WeekSummary>.ToPagedList(weekSummaries, reportParameters.PageNumber, reportParameters.PageSize);
         }
 
         public void Save()
@@ -69,6 +90,27 @@ namespace Tests.MockServices
         {
             var joggingFromList = _joggings.Where(j => j.Id == jogging.Id).FirstOrDefault();
             joggingFromList = jogging;
+        }
+
+        private WeekSummary GetWeekSummary(List<Jogging> joggings)
+        {
+            if (joggings.Count() < 1)
+            {
+                return null;
+            }
+            var userId = joggings.FirstOrDefault().UserId;
+            var avgTime = joggings.Average(j => j.JoggingDurationInMinutes);
+            var avgDistance = joggings.Average(j => j.DistanceInMeters);
+            var avgSpeed = avgDistance / avgTime;
+            var dateList = joggings.Select(j => j.JoggingDate).ToList();
+            return new WeekSummary
+            {
+                UserId = userId,
+                AvgTimeInMinutes = avgTime,
+                AvgDistanceInMeters = avgDistance,
+                AvgSpeedMeterPerMinute = avgSpeed,
+                WeekDates = dateList
+            };
         }
     }
 }

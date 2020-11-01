@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Models.DataTransferObjects.JoggingDtos;
 using Models.IdentityModels;
+using Models.JoggingModels;
 using Models.RequestParams;
 using Moq;
 using System;
@@ -16,6 +17,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Tests.MockServices;
 using Xunit;
+using Xunit.Sdk;
 
 namespace Tests.UnitTests
 {
@@ -328,6 +330,73 @@ namespace Tests.UnitTests
 
             // Act
             var result = await _controller.DeleteJogging(jogggingId) as StatusCodeResult;
+
+            // Assert 
+            Assert.Equal(403, result.StatusCode);
+        }
+
+        [Fact]
+        public async Task GetWeeklyReports_ReturnsOkObjectResultOnSuccess()
+        {
+            var userId = 2002;
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            { new Claim(ClaimTypes.Name, "joggeruser"), new Claim(ClaimTypes.Role, "Jogger")}));
+
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
+            _controller.ControllerContext.HttpContext.Items.Add("user", new User { Id = 2002, UserName = "joggeruser"});
+
+            // Act
+            var result = await _controller.GetReports(userId, new ReportParameters { });
+
+            // Assert 
+            Assert.IsType<OkObjectResult>(result);
+
+        }
+
+        [Fact]
+        public async Task GetWeeklyReports_ReturnsPagedListOfWeekSummaryOfUserWhoCreated()
+        {
+            var userId = 2002;
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            { new Claim(ClaimTypes.Name, "joggeruser"), new Claim(ClaimTypes.Role, "Jogger")}));
+
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
+            _controller.ControllerContext.HttpContext.Items.Add("user", new User { Id = 2002, UserName = "joggeruser" });
+
+            // Act
+            var result = await _controller.GetReports(userId, new ReportParameters { }) as OkObjectResult;
+
+            // Assert 
+            Assert.IsType<PagedList<WeekSummary>>(result.Value);
+            var data = result.Value as PagedList<WeekSummary>;
+            foreach(var ws in data)
+            {
+                Assert.Equal(userId, ws.UserId);
+            }
+
+        }
+
+        [Fact]
+        public async Task GetWeeklyReports_Returns403ForbiddenWhenUserIsNotOwner()
+        {
+            var userId = 2002;
+            var user = new ClaimsPrincipal(new ClaimsIdentity(new Claim[]
+            { new Claim(ClaimTypes.Name, "joggeruser"), new Claim(ClaimTypes.Role, "Jogger")}));
+
+            _controller.ControllerContext = new ControllerContext()
+            {
+                HttpContext = new DefaultHttpContext { User = user }
+            };
+            _controller.ControllerContext.HttpContext.Items.Add("user", new User { Id = 2003, UserName = "somootheruser" });
+
+            // Act
+            var result = await _controller.GetReports(userId, new ReportParameters { }) as StatusCodeResult;
 
             // Assert 
             Assert.Equal(403, result.StatusCode);
