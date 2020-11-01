@@ -15,7 +15,7 @@ namespace Models.DataTransferObjects.JoggingDtos
         [Required(ErrorMessage = "Location is required")]
         public string Location { get; set; }
         [Required(ErrorMessage = "JoggingDurationInMinutes is required")]
-        [Range(1, double.MaxValue)]
+        [Range(1, int.MaxValue)]
         public int JoggingDurationInMinutes { get; set; }
         [Required(ErrorMessage = "UserId is required")]
         [Range(1, int.MaxValue)]

@@ -57,6 +57,17 @@ namespace Repository
                 .Include(j => j.User)
                 .AsNoTracking()
                 .ToListAsync();
+        }
+
+        public async Task<PagedList<Jogging>> GetJoggingsByUserId(int userId, JoggingParameters joggingParameters)
+        {
+            var joggings = await _context.Joggings
+                .Where(j => j.UserId.Equals(userId))
+                .Include(j => j.User)
+                .AsNoTracking()
+                .ToListAsync();
+            return PagedList<Jogging>
+                .ToPagedList(joggings, joggingParameters.PageNumber, joggingParameters.PageSize);
 
         }
 

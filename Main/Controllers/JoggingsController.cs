@@ -54,7 +54,6 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-
             PagedList<Jogging> joggings = role == "Admin" ? await _repo.GetAllJoggings(joggingParameters) : 
                 await _repo.GetJoggingsByUsername(userName, joggingParameters);
             Response.Headers.Add("X-Pagination", JsonConvert.SerializeObject(joggings.MetaData));
@@ -99,8 +98,7 @@ namespace Main.Controllers
             var claimsIdentity = this.User.Identity as ClaimsIdentity;
             var userName = claimsIdentity.FindFirst(ClaimTypes.Name)?.Value;
             var role = claimsIdentity.FindFirst(ClaimTypes.Role)?.Value;
-            var users = await _userManager.Users.ToListAsync();
-            var user = await _userManager.Users.Where(u => u.Id.Equals(joggingCreateDto.UserId)).FirstOrDefaultAsync();
+            var user = _userManager.Users.Where(u => u.Id.Equals(joggingCreateDto.UserId)).FirstOrDefault();
             if (user == null)
             {
                 ModelState.AddModelError("", $"User with userid: {joggingCreateDto.UserId} does not exist");
@@ -140,7 +138,7 @@ namespace Main.Controllers
             }
             else
             {
-                return StatusCode(422, new { Success = false, ErrorMessage = weatherResult.ErrorMessage });
+                return StatusCode(422, new { Success = false, weatherResult.ErrorMessage });
             }
         }
 

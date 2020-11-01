@@ -11,6 +11,7 @@ namespace Interfaces
     {
         Task<PagedList<Jogging>> GetAllJoggings(JoggingParameters joggingParameters);
         Task<Jogging> GetJoggingById(int id);
+        Task<PagedList<Jogging>> GetJoggingsByUserId(int userId, JoggingParameters joggingParameters);
         Task<IEnumerable<Jogging>> GetJoggingsByUserId(int userId);
         Task<PagedList<Jogging>> GetJoggingsByUsername(string userName, JoggingParameters joggingParameters);
         void CreateJogging(Jogging jogging);
