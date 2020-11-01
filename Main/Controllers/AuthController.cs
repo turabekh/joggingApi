@@ -21,16 +21,13 @@ namespace Main.Controllers
     public class AuthController : ControllerBase
     {
         private readonly UserManager<User> _userManager;
-        private readonly RoleManager<Role> _roleManager;
         private readonly IMapper _mapper;
         private readonly IAuthManager _authManager;
         private readonly ILoggerManager _logger;
 
-        public AuthController(UserManager<User> userManager, RoleManager<Role> roleManager, 
-                                IMapper mapper, IAuthManager authManager, ILoggerManager logger)
+        public AuthController(UserManager<User> userManager, IMapper mapper, IAuthManager authManager, ILoggerManager logger)
         {
             _userManager = userManager;
-            _roleManager = roleManager;
             _mapper = mapper;
             _authManager = authManager;
             _logger = logger;

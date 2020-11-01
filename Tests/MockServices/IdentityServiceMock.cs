@@ -40,6 +40,7 @@ namespace Tests.MockServices
             mgr.Setup(x => x.GetRolesAsync(It.IsAny<TUser>())).ReturnsAsync(new List<string>() { "Admin" });
             mgr.Setup(x => x.Users).Returns(ls.AsQueryable());
             mgr.Setup(x => x.AddToRolesAsync(It.IsAny<TUser>(), It.IsAny<List<string>>())).ReturnsAsync(IdentityResult.Success);
+            mgr.Setup(x => x.AddToRoleAsync(It.IsAny<TUser>(), It.IsAny<string>())).ReturnsAsync(IdentityResult.Success);
             mgr.Setup(x => x.RemoveFromRolesAsync(It.IsAny<TUser>(), It.IsAny<List<string>>())).ReturnsAsync(IdentityResult.Success);
             mgr.Setup(x => x.GetRolesAsync(It.IsAny<TUser>())).ReturnsAsync(new List<string>());
             return mgr;
